@@ -227,7 +227,8 @@ app.get('/members', (req,res) => {
     }
 	const images = ['cat1.gif', 'cat2.gif', 'cat3.gif'];
 	const randomIndex = Math.floor(Math.random() * images.length);
-	const imageUrl = `/public/${images[randomIndex]}`;
+	// const imageUrl = `/public/${images[randomIndex]}`;
+	const imageUrl = `${req.protocol}://${req.hostname}/public/${images[randomIndex]}`;
     var html = '<h1>Hello, ' + req.session.username + '</h1>'
 				+ `<img src="${imageUrl}" alt="Random Image">`
 				+ '<form action=/logout><button>Logout</button></form>';
