@@ -4,9 +4,6 @@ require("./utils.js");
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-// const { MongoClient } = require('mongodb');
-// const uri = process.env.MONGO_CONNECTION_STRING;
-// const client = new MongoClient(uri);
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
@@ -18,15 +15,13 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect('mongodb+srv://vguara:3yjallOGfXRGiKW9@comp2537.vomv9eo.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true });
-const db = mongoose.connection;
+
 
 
 const Joi = require("joi");
 
 
-const expireTime = 24 * 60 * 60 * 1000; //expires after 1 day  (hours * minutes * seconds * millis)
+const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour  (hours * minutes * seconds * millis)
 
 /* secret information section */
 const mongodb_host = process.env.MONGODB_HOST;
@@ -34,9 +29,15 @@ const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
+const mongodb_connection_string = process.env.MONGO_CONNECTION_STRING;
 
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 /* END secret section */
+
+// Connect to MongoDB
+console.log(process.env.MONGO_CONNECTION_STRING)
+mongoose.connect(mongodb_connection_string, { useNewUrlParser: true });
+const db = mongoose.connection;
 
 var {database} = include('databaseConnection');
 
