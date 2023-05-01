@@ -167,28 +167,48 @@ app.post('/loggingin', async (req,res) => {
 	const result = await userCollection.find({email: email}).project({email: 1, password: 1, username:1, _id: 1}).toArray();
 
 	console.log(result);
-	if (result.length != 1) {
-		console.log("user not found");
-		res.redirect("/login");
-		return;
-	}
-	if (await bcrypt.compare(password, result[0].password)) {
-		console.log("correct password");
-		req.session.authenticated = true;
-		req.session.email = email;
-		req.session.username = result[0].username;
-		req.session.cookie.maxAge = expireTime;
+	// if (result.length != 1) {
+	// 	console.log("user not found");
+	// 	res.redirect("/login");
+	// 	return;
+	// }
+	// if (await bcrypt.compare(password, result[0].password)) {
+	// 	console.log("correct password");
+	// 	req.session.authenticated = true;
+	// 	req.session.email = email;
+	// 	req.session.username = result[0].username;
+	// 	req.session.cookie.maxAge = expireTime;
 
-		res.redirect('/members');
-		return;
+	// 	res.redirect('/members');
+	// 	return;
+	// }
+	// else {
+	// 	console.log("incorrect password");
+	// 	var html ='<p> Incorrect email/password combination</p>'
+	// 			+ '<a href=/login>Try Again</a>';
+	// 	res.send(html);
+	// 	return;
+	// }
+	if (result.length === 1) {
+		const isPasswordValid = await bcrypt.compare(password, result[0].password);
+		if (isPasswordValid) {
+			console.log("correct password");
+			req.session.authenticated = true;
+			req.session.email = email;
+			req.session.username = result[0].username;
+			req.session.cookie.maxAge = expireTime;
+	
+			res.redirect('/members');
+			return;
+		}
 	}
-	else {
-		console.log("incorrect password");
-		var html ='<p> Incorrect email/password combination</p>'
-				+ '<a href=/login>Try Again</a>';
-		res.send(html);
-		return;
-	}
+	console.log("incorrect email or password");
+	var html ='<p> Incorrect email/password combination</p>'
+			+ '<a href=/login>Try Again</a>';
+	res.send(html);
+	return;
+
+
 });
 
 app.get('/signupcheck', (req, res) => {
