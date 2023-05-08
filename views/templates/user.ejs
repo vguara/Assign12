@@ -1,0 +1,11 @@
+<li class="d-flex align-items-center">
+    <span><%= user.username %> (<%= user.usertype %>) </span>
+    <form action="/promoteUser/<%= user.username %>" method='post'>
+        <input name='username' type='hidden' value="<%= user.username %>">
+        <button type="submit" class="btn btn-success ms-3">Promote to admin</button> 
+    </form>
+    <form action="/demoteUser/<%= user.username %>" method="post">
+        <input name="username" type="hidden" value="<%= user.username %>">
+        <button type="submit" class="btn btn-warning ms-3">Demote to User</button>
+    </form>
+</li>
